@@ -42,10 +42,14 @@
           <div class="col-md-8">
               <label for="pname">Product Name</label>
               <input type="text" name="pname" class="form-control" placeholder="Product Name"> <br>
+              <label for="pdesc">Product Description</label>
+              <textarea name="pdesc" rows="6" class="form-control" style="resize:none"></textarea> <br>
               <label for="pprice">Product Price</label>
               <input type="number" name="pprice" class="form-control" placeholder="Product Price"> <br>
               <label for="pstock">Product Stock</label>
               <input type="number" name="pstock" class="form-control" placeholder="Product Price"> <br>
+              <label for="pstock">Product Category</label>
+              <select class="form-control categ" name="pcateg" id="pcateg"></select>
           </div>
         </div>
       </div>
@@ -80,6 +84,8 @@
               <input type="number" name="epprice" class="form-control" placeholder="Product Price"> <br>
               <label for="pstock">Product Stock</label>
               <input type="number" name="epstock" class="form-control" placeholder="Product Price"> <br>
+              <label for="pstock">Product Category</label>
+              <select class="form-control categ" name="epcateg" id="epcateg"></select>
               <input type="hidden" id="product_id" value="" name="product">
           </div>
         </div>

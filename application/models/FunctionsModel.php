@@ -31,6 +31,12 @@
       return $this->db->query($sql, $data);
     }
 
+    public function uniqueOrder($data)
+    {
+      $sql = "SELECT * FROM tbl_orders WHERE order_num = ? LIMIT 1";
+      return $this->db->query($sql, $data);
+    }
+
     public function newproduct($data)
     {
       $this->db->insert('tbl_products', $data);

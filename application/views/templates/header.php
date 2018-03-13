@@ -7,8 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-
-  <title>Shop Homepage - Start Bootstrap Template</title>
+  <meta name="language" content="English">
+  <title>Secret Shop</title>
 
   <!-- Bootstrap core CSS -->
   <link href="<?= base_url('assets/custemplate/') ?>vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">

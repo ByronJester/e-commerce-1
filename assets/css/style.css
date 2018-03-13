@@ -97,6 +97,10 @@ margin-left: -10px;
 	user-select: none;
 }
 
+.nores{
+	resize: none;
+}
+
 .img-responsive,.thumbnail a>img,.thumbnail>img{display:block;max-width:100%;height:auto}.img-rounded{border-radius:6px}
 
 

@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
   getProducts();
+  loadCateg();
 
   var filesToUpload = [];
   var files1Uploader = $("#files1").fileUploader(filesToUpload, "files1");
@@ -210,6 +211,18 @@ function getProducts() {
 
   ajaxCall(controller, data, onsuccess, onerror);
 
+}
+
+function loadCateg() {
+  var controller = "functions/loadCateg";
+  var data       = "";
+  var onsuccess  = function(data) {
+    data['categories'].forEach(function(datax) {
+      $('.categ').append(`<option>${datax.category_name}</option>`);
+    })
+  };
+
+  ajaxCall(controller, data, onsuccess);
 }
 
 

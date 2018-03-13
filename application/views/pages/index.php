@@ -4,8 +4,9 @@
     <div class="row">
 
       <div class="col-lg-3">
-
-        <h1 class="my-4">Secret Shop</h1>
+        <br>
+        <h1 class="my-4" style="display:inline">Secret Shop</h1>
+        <span style="display:block">What does a hero truly need?</span><br>
         <div class="list-group">
           <?php foreach($categories as $categ): ?>
             <a href="#" class="list-group-item categs" id="<?= $categ['id']?> ?>"><?=  $categ['category_name']?></a>
@@ -69,7 +70,7 @@
 
   <!-- Bootstrap core JavaScript -->
   <script src="<?= base_url() ?>assets/custemplate/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript">
 
-</body>
-
-</html>
+    loadProducts();
+  </script>

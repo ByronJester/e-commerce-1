@@ -35,6 +35,15 @@
       }
     }
 
+    public function product($slug)
+    {
+
+
+        $this->load->view('templates/header');
+        $this->load->view('pages/product');
+
+    }
+
   }
 
 

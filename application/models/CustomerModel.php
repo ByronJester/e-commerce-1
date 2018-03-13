@@ -37,7 +37,8 @@ class CustomerModel extends CI_Model
                       "name"  => $row['product_name'],
                       "price" => $row['product_price'],
                       "stock" => $row['product_stock'],
-                      "image" => $image
+                      "image" => $image,
+                      "slug"  => $row['slug']
                     );
 
         }
@@ -95,13 +96,18 @@ class CustomerModel extends CI_Model
 
           $sql1 = "SELECT * FROM tbl_products WHERE id = ? LIMIT 1";
           $res1 = $this->db->query($sql1, $row['product_id']);
+          $sql2 = "SELECT * FROM tbl_images WHERE product_id = ? LIMIT 1";
+          $res2 = $this->db->query($sql2, $row['product_id']);
+
+          $img  = $res2->row_array();
           $row1 = $res1->row_array();
           $cart[] = array(
                   "id"         => $row['id'],
                   "product_id" => $row['product_id'],
                   "quantity"   => $row['cart_quantity'],
                   "name"       => $row1['product_name'],
-                  "price"      => $row1['product_price']
+                  "price"      => $row1['product_price'],
+                  "image"      => $img['image_link']
           );
 
 
@@ -114,6 +120,49 @@ class CustomerModel extends CI_Model
         return 0;
       }
   }
+
+  public function removeItem($item)
+  {
+      $sql = "DELETE FROM tbl_cart WHERE id = ?";
+      return $this->db->query($sql, $item);
+  }
+
+  public function updateQty($data)
+  {
+      $sql = "UPDATE tbl_cart set cart_quantity = ? WHERE id = ?";
+      return $this->db->query($sql, $data);
+  }
+
+  public function placeOrder($data)
+  {
+      $sql   = "SELECT * FROM tbl_cart WHERE ip = ?";
+      $res   = $this->db->query($sql, $data[0]);
+      $total = 0;
+      if ($res->num_rows()>0) {
+
+          foreach ($res->result_array() as $row) {
+            $sql1 = "SELECT * FROM tbl_products WHERE id = ? LIMIT 1";
+            $res1 = $this->db->query($sql1, $row['product_id']);
+            $row1 = $res1->row_array();
+            $total += $row['cart_quantity']*$row1['product_price'];
+          }
+
+          $sql2 = "INSERT INTO tbl_orderinfo (order_num, cus_name, cus_address,  cus_email,total) VALUES (?,?,?,?,?)";
+          $datanew = [$data[1][0], $data[1][1], $data[1][2], $data[1][3], $total];
+          return $this->db->query($sql2, $datanew);
+
+      }
+  }
+
+  public function placeOrder1($data)
+  {
+      $sql  = "INSERT INTO tbl_orders (order_num, order_products, order_quantity) SELECT (?),product_id, cart_quantity FROM tbl_cart WHERE ip = ?";
+      $res  = $this->db->query($sql, $data);
+      $sql1 = "DELETE FROM tbl_cart WHERE ip = ?";
+      $res  = $this->db->query($sql1, $data[1]);
+  }
+
+
 
 
 }

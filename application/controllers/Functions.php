@@ -125,12 +125,14 @@
                 $pname  = $this->flib->sanitize($pname);
                 $pprice = $this->flib->sanitize($pprice);
                 $pstock = $this->flib->sanitize($pstock);
+                $slug   = str_replace(' ', '-', $pname);
 
                 $data  = array(
                           'product_code'  => $pcode,
                           'product_name'  => $pname,
                           'product_price' => $pprice,
-                          'product_stock' => $pstock
+                          'product_stock' => $pstock,
+                          'slug'          => $slug
                         );
                 $res   = $this->fmodel->newproduct($data);
                 echo json_encode(array('code' => 2, 'reply' => 'Product added', 'product' => $res));
@@ -249,6 +251,18 @@
 				endfor;
 		  }
 		}
+
+    public function loadCateg()
+    {
+      if (!$this->input->is_ajax_request()) {
+         #exit('No direct script access allowed');
+        exit(show_404());
+      }else{
+          $res = $this->cmodel->loadCateg();
+          $res = $res->result_array();
+          echo json_encode(array('categories' => $res));
+      }
+    }
 
 
 

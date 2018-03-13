@@ -56,6 +56,24 @@
 
      }
 
+     public function uniqueOrder(){
+
+       $unique_ref_length = 8;
+     		$unique_ref_found = false;
+     		$possible_chars = "abcdefghijklmnopqrstuvwxyz1234567890";
+     		while (!$unique_ref_found) {
+     		    $unique_ref = "";
+     		    $i = 0;
+     		    $unique_ref = mt_rand(10000000,99999999);
+     		    $result = $this->functionsmodel->uniqueOrder($unique_ref);
+     		    if ($result->num_rows==0) {
+     		        $unique_ref_found = true;
+     		    }
+
+     		}
+
+     }
+
       public function getIP() {
                $ipaddress = '';
                if (getenv('HTTP_CLIENT_IP'))
