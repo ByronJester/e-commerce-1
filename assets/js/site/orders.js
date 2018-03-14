@@ -52,8 +52,8 @@ $(document).ready(function() {
             }else{
               loadOrders();
               swal(
-                'Deleted!',
-                'Order has been deleted',
+                'Success!',
+                'Order has been accepted',
                 'success'
               )
             }
@@ -77,7 +77,69 @@ $(document).ready(function() {
   });
 
 
-})
+  $(document).on('click', '.closeorder', function() {
+      var order = $(this).attr('id').substr(5);
+      var controller = "functions/closeOrder";
+      var data       = {"order" : order};
+      var onsuccess  = function() {
+        loadOrders();
+        swal(
+          'Success!',
+          'Order has been closed',
+          'success'
+        )
+      }
+
+      swal({
+          title: 'Close Order?',
+          text: "The status will change to closed",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes'
+        }).then((result) => {
+          if (result.value) {
+                ajaxCall(controller, data, onsuccess);
+          }
+        })
+
+
+
+  })
+
+
+  $(document).on('click', '.archiveorder', function() {
+    var order = $(this).attr('id').substr(4);
+    var controller = "functions/archiveOrder";
+    var data       = {"order" : order};
+    var onsuccess  = function() {
+      loadOrders();
+      swal(
+        'Success!',
+        'Order has been closed',
+        'success'
+      )
+    }
+
+    swal({
+        title: 'Archive Order?',
+        text: "The order will not show in the table anymore",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes'
+      }).then((result) => {
+        if (result.value) {
+              ajaxCall(controller, data, onsuccess);
+        }
+      })
+
+  })
+
+
+}); //DOCUMENT READY
 
 
 
@@ -99,12 +161,11 @@ function loadOrders() {
                                 <th>Order #</th>
                                 <th style="width:70px">Customer Name</th>
                                 <th style="width:50px">Email</th>
-                                <th style="width:70px">Order Status</th>
                                 <th>Products</th>
                                 <th>Quantity</th>
                                 <th>Price</th>
-                                <th>Stock</th>
                                 <th>Total</th>
+                                <th>Status</th>
                                 <th style="text-align:center">Action</th>
                             </tr>
                         </thead>
@@ -136,10 +197,10 @@ function loadOrders() {
         case '1':
             order_status = 'Delivery';
             buttons      = `
-                            <button class="btn btn-info closeorder" data-toggle="tooltip" title="Delivered" id="close${order.id}">
+                            <button class="btn btn-info closeorder" data-toggle="tooltip" title="Delivered" id="close${order.order_num}">
                               <i class="fas fa-truck"></i>
                             </button>
-                            <button class="btn btn-danger deleteorder" data-toggle="tooltip" title="Delete Order" id="delete${order.id}" disabled>
+                            <button class="btn btn-danger deleteorder" data-toggle="tooltip" title="Delete Order" id="delete${order.order_num}" disabled>
                               <i class="fas fa-trash"></i>
                             </button>
                           `;
@@ -148,8 +209,8 @@ function loadOrders() {
         case '2':
             order_status = 'Closed';
             buttons      = `
-                            <button class="btn btn-danger deleteorder" data-toggle="tooltip" title="Delete Order" id="delete${order.id}">
-                              <i class="fas fa-trash"></i>
+                            <button class="btn btn-danger archiveorder" data-toggle="tooltip" title="Archive Order" id="arch${order.order_num}">
+                              <i class="fas fa-archive"></i>
                             </button>
                           `;
           break;
@@ -163,7 +224,7 @@ function loadOrders() {
                           <td rowspan="${count}" style="margin:0 auto;"><b>${order.order_num}</b></td>
                           <td rowspan="${count}">${order.cus_name}</td>
                           <td rowspan="${count}">${order.cus_email}</td>
-                          <td rowspan="${count}">${order_status}</td>
+
 
                           `;
                             product.forEach(function(pid) {
@@ -172,9 +233,9 @@ function loadOrders() {
                                   append += `
                                               <td><b>${data['productinfo'][pid]['product_name']}</b></td>
                                               <td><b>${qty[x]}</b></td>
-                                              <td>${data['productinfo'][pid]['product_price']}</td>
-                                              <td>${data['productinfo'][pid]['product_stock']}</td>
+                                              <td>₱ ${data['productinfo'][pid]['product_price']}</td>
                                               <td rowspan="${count}"><b>₱ ${order.total} </b></td>
+                                              <td rowspan="${count}"><b>${order_status}</b></td>
                                               <td rowspan="${count}"  style="text-align:center">
                                                 ${buttons}
                                               </td>
@@ -183,8 +244,7 @@ function loadOrders() {
                                   append += `<tr>
                                               <td><b>${data['productinfo'][pid]['product_name']}</b></td>
                                               <td><b>${qty[x]}</b></td>
-                                              <td>${data['productinfo'][pid]['product_price']}</td>
-                                              <td>${data['productinfo'][pid]['product_stock']}</td>
+                                              <td>₱ ${data['productinfo'][pid]['product_price']}</td>
 
                                             </tr>`;
                                 }
@@ -206,10 +266,6 @@ function loadOrders() {
   ajaxCall(controller, data, onsuccess);
 
 }
-
-
-
-
 
 
 

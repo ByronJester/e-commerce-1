@@ -56,6 +56,25 @@ $(document).ready(function() {
 
 
     $(document).on('click', '#porder', function() {
+
+      var controller = "customer/checkCart";
+      var data       = "";
+      var onsuccess  = function(data) {
+
+
+
+          if (data[0].code == 3) {
+              var errhold    = "";
+              data.forEach(function(data) {
+                errhold += data.msg+"<br>";
+              })
+              swal('Error', errhold, 'error');
+          }else{
+            window.location.href = base_url + "placeorder";
+          }
+
+      }
+
       swal({
           title: 'Confirm cart content?',
           text: "Place Order",
@@ -66,7 +85,8 @@ $(document).ready(function() {
           confirmButtonText: 'Yes'
         }).then((result) => {
           if (result.value) {
-              window.location.href = base_url + "placeorder";
+
+              ajaxCall(controller, data, onsuccess);
           }
         })
     })
@@ -228,8 +248,8 @@ function loadCart() {
                               <div class="col-md-8">
                                   <h4>${data.name}</h4>
                                   <h5>&#8369; ${data.price}</h5>
+                                  <span style="color:#ff7675">${data.extra}</span>
                                   <br>
-                                  <span>Quantity</span>
                                   <div class="input-group" style="bottom:0;position:absolute">
                                       <span class="input-group-btn">
                                           <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="" id="minus${data.id}">

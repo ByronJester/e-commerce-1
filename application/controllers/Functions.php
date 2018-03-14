@@ -323,15 +323,28 @@
       }
     }
 
-    public function deleteOrder($value='')
+    public function deleteOrder()
     {
       if (!$this->input->is_ajax_request()) {
          #exit('No direct script access allowed');
          exit(show_404());
       }else{
 
-          $order = $this->input->post('order');
+          $order = $this->flib->sanitize($this->input->post('order'));
           $this->fmodel->deleteOrder($order);
+          echo json_encode(array("code" => 2));
+      }
+    }
+
+    public function archiveOrder()
+    {
+      if (!$this->input->is_ajax_request()) {
+         #exit('No direct script access allowed');
+         exit(show_404());
+      }else{
+
+          $order = $this->flib->sanitize($this->input->post('order'));
+          $this->fmodel->archiveOrder($order);
           echo json_encode(array("code" => 2));
       }
     }
@@ -342,14 +355,44 @@
          #exit('No direct script access allowed');
          exit(show_404());
       }else{
-          $order      = $this->input->post('order');
+          $order      = $this->flib->sanitize($this->input->post('order'));
           $res        = $this->fmodel->checkInvent($order);
           if (count($res['err']) != 0) {
               echo json_encode($res['err']);
           }else{
             $res1     = $this->fmodel->orderSuccess($order);
+            echo json_encode(array(["code" => 2, "msg" => "Order has been confirmed"]));
           }
       }
+    }
+
+    public function closeOrder()
+    {
+      if (!$this->input->is_ajax_request()) {
+         #exit('No direct script access allowed');
+         exit(show_404());
+      }else{
+
+          date_default_timezone_set("Asia/Manila");
+          $datex= date("Y-m-d");
+          $order      = $this->flib->sanitize($this->input->post('order'));
+
+          $res        = $this->fmodel->closeOrder([$datex, $order]);
+          echo json_encode(array("code" => 2));
+      }
+    }
+
+    public function genAll()
+    {
+      echo json_encode($this->fmodel->genallReport());
+    }
+
+    public function genrange()
+    {
+      $from = $this->input->post('from');
+      $to   = $this->input->post('to');
+      $res  = $this->fmodel->genrangeReport([$from, $to]);
+      echo json_encode($res);
     }
 
 

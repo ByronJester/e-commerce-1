@@ -199,7 +199,7 @@ function getProducts() {
                             <i class="fas fa-image"></i>
                           </button>
                           <button class="btn btn-warning editpro" data-toggle="tooltip" title="Edit Account" id="edit${product.id}">
-                            <i class="far fa-edit"></i>
+                            <i class="far fa-edit" style="color:#FFF"></i>
                           </button>
                           <button class="btn btn-danger deletepro" data-toggle="tooltip" title="Pull out Product" id="delete${product.id}">
                             <i class="fas fa-trash"></i>

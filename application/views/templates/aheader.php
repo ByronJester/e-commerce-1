@@ -22,7 +22,7 @@
 
 	<!-- Bootstrap core JavaScript-->
 	<script src="<?= base_url('assets/admintemp/') ?>vendor/jquery/jquery.min.js"></script>
-	
+
 
 	<script type="text/javascript" src="<?= base_url()?>assets/datatables/datatables.min.js"></script>
 	<script type="text/javascript" src="<?= base_url()?>assets/datatables/dataTables.bootstrap4.min.js"></script>
@@ -47,9 +47,15 @@
             <span class="nav-link-text">Dashboard</span>
           </a>
         </li>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Sales">
+          <a class="nav-link" href="<?= base_url('admin/sales') ?>">
+            <i class="fa fa-fw fa-area-chart"></i>
+            <span class="nav-link-text">Sales</span>
+          </a>
+        </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Products">
           <a class="nav-link" href="<?= base_url('admin/products') ?>">
-            <i class="fa fa-fw fa-area-chart"></i>
+            <i class="fa fa-fw fa-archive"></i>
             <span class="nav-link-text">Products</span>
           </a>
         </li>

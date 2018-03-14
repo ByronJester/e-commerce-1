@@ -210,6 +210,33 @@ class Customer extends CI_Controller
 
   }
 
+  public function checkCart()
+  {
+    if (!$this->input->is_ajax_request()) {
+       #exit('No direct script access allowed');
+       exit(show_404());
+    }else{
+        $ip   = $this->flib->getIP();
+        $res  = $this->cmodel->checkCart($ip);
+        if (count($res['err']) == 0) {
+            echo json_encode(array(["code" => 2]));
+        }else{
+           echo json_encode($res['err']);
+        }
+    }
+  }
+
+  public function searchProduct()
+  {
+    if (!$this->input->is_ajax_request()) {
+       #exit('No direct script access allowed');
+       exit(show_404());
+    }else{
+      $query = $this->flib->sanitize($this->input->post('query'));
+      $res   = $this->fmodel->searchProduct($query);
+    }
+  }
+
 }
 
 

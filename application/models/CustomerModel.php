@@ -99,16 +99,39 @@ class CustomerModel extends CI_Model
           $sql2 = "SELECT * FROM tbl_images WHERE product_id = ? LIMIT 1";
           $res2 = $this->db->query($sql2, $row['product_id']);
 
-          $img  = $res2->row_array();
+          if ($res2->num_rows()>0) {
+            $img  = $res2->row_array();
+            $img  = $img['image_link'];
+          }else{
+            $img  = "assets/images/product-default.jpg";
+          }
+
           $row1 = $res1->row_array();
-          $cart[] = array(
-                  "id"         => $row['id'],
-                  "product_id" => $row['product_id'],
-                  "quantity"   => $row['cart_quantity'],
-                  "name"       => $row1['product_name'],
-                  "price"      => $row1['product_price'],
-                  "image"      => $img['image_link']
-          );
+          if ($row1['status'] == 0) {
+
+            $cart[] = array(
+                    "id"         => $row['id'],
+                    "product_id" => $row['product_id'],
+                    "quantity"   => $row['cart_quantity'],
+                    "name"       => $row1['product_name'],
+                    "price"      => $row1['product_price'],
+                    "image"      => $img,
+                    "extra"      => ''
+            );
+
+          }else{
+
+            $cart[] = array(
+                    "id"         => $row['id'],
+                    "product_id" => $row['product_id'],
+                    "quantity"   => $row['cart_quantity'],
+                    "name"       => $row1['product_name'],
+                    "price"      => 0,
+                    "image"      => $img,
+                    "extra"      => " <b style='font-size:18px !important'>* This product is currently unavailable </b>"
+            );
+
+          }
 
 
 
@@ -160,6 +183,48 @@ class CustomerModel extends CI_Model
       $res  = $this->db->query($sql, $data);
       $sql1 = "DELETE FROM tbl_cart WHERE ip = ?";
       $res  = $this->db->query($sql1, $data[1]);
+  }
+
+
+  public function checkCart($ip)
+  {
+      $sql  = "SELECT * FROM tbl_cart where ip = ?";
+      $res  = $this->db->query($sql, $ip);
+      $data['err'] = [];
+      if ($res->num_rows() > 0) {
+
+            foreach ($res->result_array() as $row) {
+
+              $sql1 = "SELECT * FROM tbl_products WHERE id = ? LIMIT 1";
+              $res1 = $this->db->query($sql1, $row['product_id']);
+              $row1 = $res1->row_array();
+
+              if ($row1['status'] == 1) {
+                $data['err'][] = array("code" => 3, "msg" => $row1['product_name']." is currently unavailable");
+              }
+
+            }
+            return $data;
+      }
+  }
+
+  public function searchProduct($query)
+  {
+      $this->db->select('*');
+      $this->db->where('product_stock !=',0);
+      $this->db->where('status =',0);
+      $this->db->from('product');
+      if ($query != '') {
+          $this->db->like('product_name', $query);
+          $this->db->or_like('product_name', $query);
+          $this->db->or_like('product_description', $query);
+          $this->db->or_like('product_categ', $query);
+
+      }
+
+        $this->db->order_by('id', 'DESC');
+        return $this->db->get();
+
   }
 
 
