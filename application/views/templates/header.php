@@ -23,6 +23,11 @@
   <input type="text" id="base_url" value="<?= base_url() ?>" hidden>
 	<script type="text/javascript"> var base_url = $('#base_url').val();</script>
 </head>
+<style media="screen">
+  .container-fluid{
+    margin-top: 20px;
+  }
+</style>
 
 <body>
 

@@ -23,15 +23,13 @@
       show_404();
       }else{
 
-          if (!isset($this->session->userdata['user'])) {
-            redirect(base_url());
-          }else{
+
             $data['title'] = ucfirst($page);
 
             $this->load->view('templates/header',$data);
             $this->load->view('pages/'.$page);
 
-          }
+          
       }
     }
 

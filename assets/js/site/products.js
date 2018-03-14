@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+  $('#sidenavToggler').trigger('click');
   getProducts();
   loadCateg();
 
@@ -81,13 +81,21 @@ $(document).ready(function() {
   $(document).on('click', '.editpro', function() {
 
     var product = $(this).attr('id').substr(4);
-		var name = $(this).closest('tr').find('td:eq(2)').text();
-		var stock = $(this).closest('tr').find('td:eq(3)').text();
-		var price = $(this).closest('tr').find('td:eq(4)').text();
+		var name    = $(this).closest('tr').find('td:eq(1)').text();
+    var desc    = $(this).closest('tr').find('td:eq(2) span').attr('title');
+		var stock   = $(this).closest('tr').find('td:eq(3)').text();
+		var price   = $(this).closest('tr').find('td:eq(4)').text();
+    var categ   = $(this).closest('tr').find('td:eq(5)').text();
+
+    if (desc == undefined) {
+        desc    = $(this).closest('tr').find('td:eq(2)').text();
+    }
 
     $('input[name=epname]').val(name);
+    $('textarea[name=epdesc]').val(desc);
     $('input[name=epstock]').val(stock);
     $('input[name=epprice]').val(price);
+    $('#epcateg').val(categ);
     $('#product_id').val(product);
 
     $('#editproductmodal').modal('show');
@@ -164,26 +172,28 @@ function getProducts() {
   var data       = '';
   var onsuccess  = function(data) {
 
-      var append = `<table id="example" class="table table-striped table-bordered" style="width:100%">
+      var append = `<table id="example" class="table table-striped table-bordered dt-responsive" style="width:100%">
                     <thead>
                         <tr>
-                            <th></th>
                             <th>Code</th>
                             <th>Name</th>
+                            <th>Description</th>
                             <th>Stock</th>
                             <th>Price</th>
-                            <th width="20%" style="text-align:center">Action</th>
+                            <th>Category</th>
+                            <th style="width:150px !important;text-align:center">Action</th>
                         </tr>
                     </thead>
                     <tbody>`;
 
       data.forEach(function(product) {
           append += `<tr>
-                      <td></td>
-                      <td>${product.product_code}</td>
+                      <td><b>${product.product_code}</b></td>
                       <td>${product.product_name}</td>
+                      <td value="${product.product_description}">${product.product_description}</td>
                       <td>${product.product_stock}</td>
                       <td>${product.product_price}</td>
+                      <td>${product.product_categ}</td>
                       <td style="text-align:center">
                           <button class="btn btn-info viewimage" data-toggle="tooltip" title="View images" id="viewimage${product.id}">
                             <i class="fas fa-image"></i>
@@ -202,7 +212,18 @@ function getProducts() {
               </table>`;
 
               $('#product-data').html(append);
-      $('#example').DataTable();
+              $('#example').DataTable({
+                                      "columnDefs": [ {
+                                        "targets": 2,
+                                        "data": "description",
+                                        "render": function ( data, type, row, meta ) {
+                                          return type === 'display' && data.length > 40 ?
+                                            '<span title="'+data+'">'+data.substr( 0, 38 )+'...</span>' :
+                                            data;
+                                        }
+                                      } ]
+                                    }).column( 1 ).data().sort();
+
   };
 
   var onerror = function() {
@@ -218,7 +239,7 @@ function loadCateg() {
   var data       = "";
   var onsuccess  = function(data) {
     data['categories'].forEach(function(datax) {
-      $('.categ').append(`<option>${datax.category_name}</option>`);
+      $('.categ').append(`<option value="${datax.category_name}">${datax.category_name}</option>`);
     })
   };
 

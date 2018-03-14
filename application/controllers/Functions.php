@@ -69,6 +69,11 @@
 
     }// login
 
+    /* ========================================================================================= *
+     * ====================================PRODUCTS============================================= *
+     * ========================================================================================= *
+    */
+
     public function getProducts()
     {
       $res = $this->fmodel->getProducts();
@@ -92,11 +97,18 @@
           $pname  = $this->input->post('pname');
           $pprice = $this->input->post('pprice');
           $pstock = $this->input->post('pstock');
+          $pdesc  = $this->input->post('pdesc');
+          $pcateg = $this->input->post('pcateg');
 
           $config = array(
                   array(
                           'field' => 'pname',
                           'label' => 'Product Name',
+                          'rules' => 'required|trim|htmlspecialchars'
+                  ),
+                  array(
+                          'field' => 'pdesc',
+                          'label' => 'Product Description',
                           'rules' => 'required|trim|htmlspecialchars'
                   ),
                   array(
@@ -108,6 +120,11 @@
                           'field' => 'pstock',
                           'label' => 'Product Stock',
                           'rules' => 'required|numeric|is_natural_no_zero',
+                  ),
+                  array(
+                          'field' => 'pcateg',
+                          'label' => 'Product Category',
+                          'rules' => 'required|trim|htmlspecialchars'
                   ),
           );
 
@@ -125,14 +142,18 @@
                 $pname  = $this->flib->sanitize($pname);
                 $pprice = $this->flib->sanitize($pprice);
                 $pstock = $this->flib->sanitize($pstock);
+                $pdesc  = $this->flib->sanitize($pdesc);
+                $pcateg = $this->flib->sanitize($pcateg);
                 $slug   = str_replace(' ', '-', $pname);
 
                 $data  = array(
-                          'product_code'  => $pcode,
-                          'product_name'  => $pname,
-                          'product_price' => $pprice,
-                          'product_stock' => $pstock,
-                          'slug'          => $slug
+                          'product_code'        => $pcode,
+                          'product_name'        => $pname,
+                          'product_description' => $pdesc,
+                          'product_price'       => $pprice,
+                          'product_stock'       => $pstock,
+                          'product_categ'       => $pcateg,
+                          'slug'                => $slug
                         );
                 $res   = $this->fmodel->newproduct($data);
                 echo json_encode(array('code' => 2, 'reply' => 'Product added', 'product' => $res));
@@ -154,11 +175,18 @@
         $pprice  = $this->input->post('epprice');
         $pstock  = $this->input->post('epstock');
         $product = $this->input->post('product');
+        $pcateg  = $this->input->post('epcateg');
+        $pdesc   = $this->input->post('epdesc');
 
         $config = array(
                 array(
                         'field' => 'epname',
                         'label' => 'Product Name',
+                        'rules' => 'required|trim|htmlspecialchars'
+                ),
+                array(
+                        'field' => 'epdesc',
+                        'label' => 'Product Description',
                         'rules' => 'required|trim|htmlspecialchars'
                 ),
                 array(
@@ -171,6 +199,11 @@
                         'label' => 'Product Stock',
                         'rules' => 'required|numeric|is_natural_no_zero',
                 ),
+                array(
+                        'field' => 'epcateg',
+                        'label' => 'Product Category',
+                        'rules' => 'required|trim|htmlspecialchars'
+                ),
         );
 
         $this->form_validation->set_rules($config);
@@ -182,7 +215,7 @@
             if ($check->num_rows()>0) {
               echo json_encode(array('code' => 1, 'reply' => 'Product is already existing'));
             }else{
-              $data  = $this->flib->sanitizer([$pname, $pprice, $pstock, $product]);
+              $data  = $this->flib->sanitizer([$pname, $pdesc, $pprice, $pstock, $pcateg, $product]);
               $res   = $this->fmodel->editProduct($data);
               echo json_encode(array('code' => 2, 'reply' => 'Product edited', 'product' => $data));
             }
@@ -264,6 +297,60 @@
       }
     }
 
+    /* ========================================================================================= *
+     * ====================================PRODUCTS END========================================= *
+     * ========================================================================================= *
+    */
+
+    /* ========================================================================================= *
+     * ====================================ORDERS=============================================== *
+     * ========================================================================================= *
+    */
+
+    public function loadOrders()
+    {
+      if (!$this->input->is_ajax_request()) {
+         #exit('No direct script access allowed');
+         exit(show_404());
+      }else{
+
+        $res = $this->fmodel->loadOrders();
+
+        //foreach ($res as $key) {
+          #echo "<br>".$key['cus_name']." | ".$key['order_products'];
+        //}
+        echo json_encode($res);
+      }
+    }
+
+    public function deleteOrder($value='')
+    {
+      if (!$this->input->is_ajax_request()) {
+         #exit('No direct script access allowed');
+         exit(show_404());
+      }else{
+
+          $order = $this->input->post('order');
+          $this->fmodel->deleteOrder($order);
+          echo json_encode(array("code" => 2));
+      }
+    }
+
+    public function acceptOrder()
+    {
+      if (!$this->input->is_ajax_request()) {
+         #exit('No direct script access allowed');
+         exit(show_404());
+      }else{
+          $order      = $this->input->post('order');
+          $res        = $this->fmodel->checkInvent($order);
+          if (count($res['err']) != 0) {
+              echo json_encode($res['err']);
+          }else{
+            $res1     = $this->fmodel->orderSuccess($order);
+          }
+      }
+    }
 
 
   }

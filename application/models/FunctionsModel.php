@@ -12,6 +12,11 @@
       return $this->db->query($sql, $data);
     }
 
+    /* ========================================================================================= *
+     * ====================================PRODUCTS============================================= *
+     * ========================================================================================= *
+    */
+
     public function checkProduct($data)
     {
       $sql = "SELECT * FROM tbl_products where product_name = ? LIMIT 1";
@@ -47,7 +52,7 @@
 
     public function editProduct($data)
     {
-      $sql = "UPDATE tbl_products set product_name = ?, product_price = ?, product_stock =? WHERE id = ?";
+      $sql = "UPDATE tbl_products set product_name = ?, product_description = ?,product_price = ?, product_stock =?, product_categ = ? WHERE id = ?";
       return $this->db->query($sql, $data);
     }
 
@@ -72,6 +77,108 @@
     {
         $sql = "INSERT INTO tbl_images (product_id, image_link) VALUES (?,?)";
         $this->db->query($sql, $data);
+    }
+
+    /* ========================================================================================= *
+     * ====================================PRODUCTS END========================================= *
+     * ========================================================================================= *
+    */
+    /* ========================================================================================= *
+     * ======================================ORDERS============================================= *
+     * ========================================================================================= *
+    */
+
+    public function loadOrders()
+    {
+        $sql = "SELECT    b.*,group_concat(a.order_products) as product,group_concat(a.order_quantity) as quantity
+                FROM tbl_orders as a INNER JOIN tbl_orderinfo as b  ON a.order_num = b.order_num
+                WHERE b.order_status != ? GROUP BY b.order_num ORDER BY b.id ASC";
+
+        $res = $this->db->query($sql,3);
+
+        if ($res->num_rows()>0) {
+
+          $data['orderinfo']    = $res->result_array();
+          $data['productinfo']  = [];
+
+            foreach ($res->result_array() as $row) {
+
+              $prod = explode(',', $row['product']);
+
+              foreach ($prod as $pid) {
+
+                  $sql1   = "SELECT id,product_name,product_price,product_stock FROM tbl_products WHERE id =? LIMIT 1";
+                  $data['productinfo'][$pid] = $this->db->query($sql1, $pid)->row_array();
+
+              }
+
+            }
+
+            return $data;
+
+        }else{
+          return 0;
+        }
+        //return $res->result_array();
+    }
+
+    public function deleteOrder($data)
+    {
+        $sql = "UPDATE tbl_orderinfo set order_status = 3 WHERE order_num = ?";
+        $sql1 = "UPDATE tbl_orders set order_status = 3 WHERE order_num = ?";
+        $this->db->query($sql1, $data);
+        return $this->db->query($sql, $data);
+    }
+
+
+    public function checkInvent($order)
+    {
+        $sql       = "SELECT * FROM tbl_orders WHERE order_num = ?";
+        $res       = $this->db->query($sql, $order);
+        $data['err'] = [];
+        if ($res->num_rows()>0) {
+
+          foreach ($res->result_array() as $row) {
+
+            $sql1 = "SELECT * FROM tbl_products WHERE id = ? LIMIT 1";
+            $res1 = $this->db->query($sql1, $row['order_products']);
+            if ($res1->row_array()>0) {
+              $row1 = $res1->row_array();
+              if ($row1['product_stock'] < $row['order_quantity']) {
+                  $data['err'][] = array("code" => 3, "msg" => "Not enough stock of ".$row1['product_name']);
+              }
+
+            }else{
+              $data['err'][] = array("code" => 3, "msg" => "Error , item in cart is not in the database");
+            }
+
+
+          }
+
+        }
+
+        return $data;
+    }
+
+    public function orderSuccess($order)
+    {
+        $sql       = "SELECT * FROM tbl_orders WHERE order_num = ?";
+        $res       = $this->db->query($sql, $order);
+        $data['err'] = [];
+        if ($res->num_rows()>0) {
+
+          foreach ($res->result_array() as $row) {
+
+            $sql1 = "UPDATE tbl_products SET product_stock = product_stock-?, sold = sold+1 WHERE id = ?";
+            $res1 = $this->db->query($sql1, [$row['order_quantity'] ,$row['order_products']]);
+          
+
+
+          }
+
+        }
+
+        return $data;
     }
 
 

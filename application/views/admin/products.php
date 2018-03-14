@@ -4,8 +4,9 @@
 <div class="row">
   <div class="col-md-12">
     <div class="" align="right">
-      <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#newproductm">New Product</button>
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#newproductm">New Product</button>
     </div>
+    <br>
     <div id="product-data">
 
     </div>
@@ -80,6 +81,8 @@
           <div class="col-md-8">
               <label for="pname">Product Name</label>
               <input type="text" name="epname" class="form-control" placeholder="Product Name"> <br>
+              <label for="epdesc">Product Description</label>
+              <textarea name="epdesc" rows="6" class="form-control" style="resize:none"></textarea> <br>
               <label for="pprice">Product Price</label>
               <input type="number" name="epprice" class="form-control" placeholder="Product Price"> <br>
               <label for="pstock">Product Stock</label>
@@ -105,7 +108,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">New Product</h5>
+        <h5 class="modal-title">Product Images</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

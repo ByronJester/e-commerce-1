@@ -24,6 +24,7 @@
 
               $this->load->view('templates/aheader',$data);
               $this->load->view('admin/'.$page);
+              $this->load->view('templates/afooter',$data);
 
             }
         }
