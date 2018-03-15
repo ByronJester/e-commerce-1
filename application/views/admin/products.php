@@ -115,9 +115,24 @@
       </div>
       <form id="editproduct">
       <div class="modal-body">
-        <div class="row">
-          <div class="col-md-12">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-4" style="border:1px solid #f2f2f2;padding:10px;">
 
+              <div class="post-btn files" id="files2">
+                <span class="btn-file fas fa-image fa-2x" style="display:inline">
+                    <input type="file" name="files2" multiple accept="image/*" />
+                </span>
+                <b> Add Images </b>&nbsp;
+                <ul class="fileList" style="margin-top: 10px"></ul>
+              </div>
+
+            </div>
+            <div class="col-md-8">
+              <div class="row" id="image-view" style="border:1px solid #f2f2f2;padding:10px;">
+
+              </div>
+            </div>
           </div>
         </div>
       </div>

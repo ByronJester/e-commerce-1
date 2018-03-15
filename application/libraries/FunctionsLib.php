@@ -16,8 +16,9 @@
      public function sanitize($data)
      {
         $data = trim($data);
-   	    $data = stripslashes($data);
-   			$data = addslashes($data);
+        $data = addslashes($data);
+   	    //$data = stripslashes($data);
+        $data = htmlspecialchars($data);
    	    return $data;
      }
 
@@ -29,7 +30,7 @@
 
           $key = trim($key);
     	    $key = stripslashes($key);
-    			$key = addslashes($key);
+    			//$key = addslashes($key);
     	    $key = htmlspecialchars($key);
           array_push($return, $key);
        }

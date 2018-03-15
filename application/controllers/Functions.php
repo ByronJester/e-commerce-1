@@ -145,6 +145,7 @@
                 $pdesc  = $this->flib->sanitize($pdesc);
                 $pcateg = $this->flib->sanitize($pcateg);
                 $slug   = str_replace(' ', '-', $pname);
+                $slug   = str_replace("'", '%27', $slug);
 
                 $data  = array(
                           'product_code'        => $pcode,
@@ -215,7 +216,9 @@
             if ($check->num_rows()>0) {
               echo json_encode(array('code' => 1, 'reply' => 'Product is already existing'));
             }else{
-              $data  = $this->flib->sanitizer([$pname, $pdesc, $pprice, $pstock, $pcateg, $product]);
+              $slug  = str_replace(' ', '-', $pname);
+              $slug  = str_replace("'", '%27', $slug);
+              $data  = $this->flib->sanitizer([$pname, $pdesc, $pprice, $pstock, $pcateg, $slug, $product]);
               $res   = $this->fmodel->editProduct($data);
               echo json_encode(array('code' => 2, 'reply' => 'Product edited', 'product' => $data));
             }
@@ -295,6 +298,17 @@
           $res = $res->result_array();
           echo json_encode(array('categories' => $res));
       }
+    }
+
+    public function loadImages()
+    {
+        $product = $this->flib->sanitize($this->input->post('product'));
+        $res     = $this->fmodel->getImages($product);
+        if ($res->num_rows()>0) {
+          echo json_encode($res->result_array());
+        }else{
+          echo json_encode(array(["code" => 2, "msg" => "no image"]));
+        }
     }
 
     /* ========================================================================================= *

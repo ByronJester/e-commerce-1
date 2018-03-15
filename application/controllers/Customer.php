@@ -233,9 +233,15 @@ class Customer extends CI_Controller
        exit(show_404());
     }else{
       $query = $this->flib->sanitize($this->input->post('query'));
-      $res   = $this->fmodel->searchProduct($query);
+      $res   = $this->cmodel->searchProduct($query);
+      if ($res->num_rows()>0) {
+        echo json_encode($res->result_array());
+      }else{
+          echo json_encode(array(["code" => 2, "reply" => "No Product Found"]));
+      }
     }
   }
+
 
 }
 

@@ -13,7 +13,7 @@ class CustomerModel extends CI_Model
 
   public function loadProducts()
   {
-      $sql = "SELECT * FROM tbl_products  WHERE product_stock != 0 ";
+      $sql = "SELECT * FROM tbl_products  WHERE product_stock != 0 AND status = 0";
       $res = $this->db->query($sql);
 
       $data = [];
@@ -38,7 +38,8 @@ class CustomerModel extends CI_Model
                       "price" => $row['product_price'],
                       "stock" => $row['product_stock'],
                       "image" => $image,
-                      "slug"  => $row['slug']
+                      "slug"  => $row['slug'],
+                      "desc"  => $row['product_description']
                     );
 
         }
@@ -210,10 +211,14 @@ class CustomerModel extends CI_Model
 
   public function searchProduct($query)
   {
-      $this->db->select('*');
+      $this->db->select('product_name');
+      $this->db->select('slug');
+      $this->db->select('product_price');
+      $this->db->select('product_description');
+      $this->db->select('product_categ');
       $this->db->where('product_stock !=',0);
       $this->db->where('status =',0);
-      $this->db->from('product');
+      $this->db->from('tbl_products');
       if ($query != '') {
           $this->db->like('product_name', $query);
           $this->db->or_like('product_name', $query);
@@ -228,6 +233,28 @@ class CustomerModel extends CI_Model
   }
 
 
+    public function getProduct($slug)
+    {
+        $sql = "SELECT * FROM tbl_products WHERE slug = ? LIMIT 1";
+        $res = $this->db->query($sql, $slug);
+        if ($res->num_rows()>0) {
+
+          $row = $res->row_array();
+
+          $sql2 = "SELECT * FROM tbl_images WHERE product_id = ?";
+          $res2 = $this->db->query($sql2, $row['id']);
+          $data = [];
+          if ($res2->num_rows()>0) {
+              $data['images'] = $res2->result_array();
+          }
+          $data['product'] = $res->row_array();
+
+          return $data;
+
+        }else{
+          return 0;
+        }
+    }
 
 
 }

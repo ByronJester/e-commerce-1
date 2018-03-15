@@ -35,9 +35,14 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
       <a class="navbar-brand" href="<?= base_url() ?>">Secret Shop</a>
-
-        <input type="text" name="search" placeholder="Search product"  class="form-control" style="max-width:300px">
-    
+        <div style="max-width:300px;width:300px " style="display:inline">
+          <input type="text" id="search" placeholder="Search product"  class="form-control" style="max-width:300px" onclick="$('.searchresult').show();">
+            <div class="searchresult"  onmouseleave="$('.searchresult').hide();">
+              <div class="resultdivx">
+                Search . . .
+              </div>
+          </div>
+        </div>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>

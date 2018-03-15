@@ -5,6 +5,7 @@ $(document).ready(function() {
 
   var filesToUpload = [];
   var files1Uploader = $("#files1").fileUploader(filesToUpload, "files1");
+  var files2Uploader = $("#files2").fileUploader(filesToUpload, "files2");
 
   function uploadImg(code) {
 
@@ -134,14 +135,28 @@ $(document).ready(function() {
     var controller = "functions/loadImages";
     var data       = {"product" : product};
     var onsuccess  = function(data){
+    var append     = "";
 
+      console.log(data);
+      if (data[0].code != 2) {
 
+        data.forEach(function(img) {
+            append += `<div class="col-md-6">
+                        <img src="${base_url+img.image_link}" class="img-responsive prodimg0">
+                        </div>`;
+        })
+
+      }else{
+          append  = `<div class="col-md-6"><h1>${data[0].msg}</h1></div>`;
+      }
+
+      $('#image-view').html(append);
+      $('#imagemodal').modal('show');
 
 
     }
-    $('#imagemodal').modal('show');
 
-
+    ajaxCall(controller, data, onsuccess);
 
   });
 

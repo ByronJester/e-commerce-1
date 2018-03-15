@@ -52,7 +52,7 @@
 
     public function editProduct($data)
     {
-      $sql = "UPDATE tbl_products set product_name = ?, product_description = ?,product_price = ?, product_stock =?, product_categ = ? WHERE id = ?";
+      $sql = "UPDATE tbl_products set product_name = ?, product_description = ?,product_price = ?, product_stock =?, product_categ = ?, slug = ? WHERE id = ?";
       return $this->db->query($sql, $data);
     }
 
@@ -77,6 +77,12 @@
     {
         $sql = "INSERT INTO tbl_images (product_id, image_link) VALUES (?,?)";
         $this->db->query($sql, $data);
+    }
+
+    public function getImages($prod)
+    {
+      $sql = "SELECT * FROM tbl_images WHERE product_id = ?";
+      return $this->db->query($sql, $prod);
     }
 
     /* ========================================================================================= *

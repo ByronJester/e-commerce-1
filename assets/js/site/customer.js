@@ -166,6 +166,13 @@ $(document).ready(function() {
       })
   })
 
+  $(document).on('keyup','#search', function() {
+      var search  = $(this).val();
+      if (search != '') {
+        searchProduct(search);
+      }
+  })
+
 }); // DOCUMENT READ
 
 function loadCartcount() {
@@ -189,7 +196,9 @@ function loadProducts($categ = '') {
 
       if (data != 0) {
         data.forEach(function(data){
-
+          if (data.desc.length > 140) {
+            data.desc = data.desc.substr(0, 140)+ ". . .";
+          }
           products += `
                       <div class="col-lg-4 col-md-6 mb-4">
                         <div class="card h-100">
@@ -199,7 +208,7 @@ function loadProducts($categ = '') {
                               <a href="${base_url}product/${data.slug}"">${data.name}</a>
                             </h4>
                             <h5>&#8369;${data.price}</h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet numquam aspernatur!</p>
+                            <p class="card-text">${data.desc}</p>
                           </div>
                           <div class="card-footer">
                             <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
@@ -324,6 +333,52 @@ function minusQty(qty, id) {
   },500);
 
 }
+
+var myTim = "";
+
+function searchProduct(search) {
+  clearTimeout(myTim);
+
+  var controller    = "customer/searchProduct";
+  var data          = {"query" : search};
+  var onsuccess     = function(data) {
+    console.log(data);
+    if (data[0].code) {
+      var result    = `<div class="resultdivx"> ${data[0].reply} </div>`;
+    }else{
+      var result    = "";
+      var x         = 0;
+      data.forEach(function(data) {
+
+          if (data.product_description.length > 40) {
+              data.product_description = data.product_description.substr(0,40)+ " . . .";
+          }
+
+          if (x < 4) {
+            result   += `<a href="${base_url + 'product/'+data.slug}" style="text-decoration:none; color: #333">
+                          <div class="resultdiv">
+                            <b>${data.product_name}</b><br>
+                            <span>&#8369; ${data.product_price}</span>
+                            <p>${data.product_description} </p>
+
+                          </div> </a>`;
+          }else{
+            result  += `<input type="button" class="btn btn-info form-control resres" value="View all result">`;
+          }
+          x++;
+
+      })
+    }
+    $('.searchresult').html(result);
+    $('.searchresult').show();
+  }
+
+  myTim = setTimeout(function() {
+          ajaxCall(controller, data, onsuccess);
+  },500);
+
+}
+
 
 
 function ajaxCall(controller, data, onsuccess, onerror = '', onfailure = ''){

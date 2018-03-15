@@ -6,6 +6,12 @@
   class Pages extends CI_Controller
   {
 
+    function __construct()
+    {
+      parent:: __construct();
+      $this->load->library('functionslib', null, 'flib');
+    }
+
     public function index()
     {
       $res = $this->cmodel->loadCateg();
@@ -29,16 +35,27 @@
             $this->load->view('templates/header',$data);
             $this->load->view('pages/'.$page);
 
-          
+
       }
     }
 
     public function product($slug)
     {
+        $slug            = $this->flib->sanitize($slug);
+        $res             = $this->cmodel->getProduct($slug);
+        $data            = "";
+        if ($res != 0) {
+          $data['product'] = $res['product'];
+          $data['images']  = $res['images'];
+        }else{
+          $data['product'] = 0;
+        }
+
 
 
         $this->load->view('templates/header');
-        $this->load->view('pages/product');
+        $this->load->view('pages/product',$data);
+
 
     }
 
