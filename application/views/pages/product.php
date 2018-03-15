@@ -14,7 +14,7 @@
                 <div class="col-md-3">
                   <?php $x = 1; foreach($images as $image): ?>
                   <img src="<?= base_url().$image['image_link']; ?>"  class="prodimg<?= $x; ?>">
-                <?php $x +=1; endforeach; ?>
+                <?php if($x==1){$x +=1;} endforeach; ?>
                 </div>
                 <div class="col-md-9">
                   <h1><?= $product['product_name'] ?></h1>

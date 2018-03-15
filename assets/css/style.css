@@ -144,12 +144,14 @@ margin-left: -10px;
 	border: 1px solid #f2f2f2;
 	height: 100px;
 	width: 100px;
+	margin-top: 5px;
 }
 .prodimg0{
-	border: 1px solid #f2f2f2;
+	border: 1px solid #333;
 	padding: 3px;
 	width: 300px !important;
 	height: 200px !important;
+	margin-top: 8px;
 }
 
 .img-responsive,.thumbnail a>img,.thumbnail>img{display:block;max-width:100%;height:auto}.img-rounded{border-radius:6px}
