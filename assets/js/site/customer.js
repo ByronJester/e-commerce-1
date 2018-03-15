@@ -118,8 +118,13 @@ $(document).ready(function() {
 
     var controller    = "customer/placeorder";
     var data          = $(this).serialize();
-    var onsuccess     = function(data) {
 
+    var name          = $('input[fname]').val()+" "+$('input[mname]').val()+" "+$('input[lname]').val();
+    var msg           = name+" place an order, check the orders tab";
+    var datax         = {"name" : name, "msg" : msg}
+
+    var onsuccess     = function(data) {
+        realtimeOrder(datax);
         if (data.code == 1) {
             swal(
               'Error',

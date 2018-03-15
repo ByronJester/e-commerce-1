@@ -20,6 +20,7 @@
                   <h1><?= $product['product_name'] ?></h1>
                   <h4>&#8369; <?= $product['product_price'] ?></h4>
                   <p><?= $product['product_description'] ?></p>
+                  <input type="button"  id="cart<?= $product['id']?>" value="Add to cart" class="btn btn-info float-right addtocart">
                 </div>
               </div>
             </div>

@@ -8,7 +8,11 @@
 
     public function index()
     {
-      $this->load->view('admin/index');
+      if (isset($this->session->userdata['user'])) {
+          redirect(base_url('admin/home'));
+      }else{
+        $this->load->view('admin/index');
+      }
     }
 
     public function reports($a = NULL, $b = NULL, $c = NULL)

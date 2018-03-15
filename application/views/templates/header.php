@@ -19,6 +19,8 @@
   <link href="<?= base_url('assets/custemplate/') ?>css/shop-homepage.css" rel="stylesheet">
 	<script type="text/javascript" src="<?= base_url() ?>assets/js/sweetalert2.all.js"></script>
 	<script type="text/javascript" src="<?= base_url() ?>assets/js/jquery.min.js"></script>
+	<script type="text/javascript" src="<?= base_url()?>assets/js/socket.io.js"></script>
+  <script type="text/javascript" src="<?= base_url()?>assets/js/site/realtime.js"></script>
   <script type="text/javascript" src="<?= base_url() ?>assets/js/site/customer.js"></script>
   <input type="text" id="base_url" value="<?= base_url() ?>" hidden>
 	<script type="text/javascript"> var base_url = $('#base_url').val();</script>

@@ -154,8 +154,8 @@
 
             $sql1 = "SELECT * FROM tbl_products WHERE id = ? LIMIT 1";
             $res1 = $this->db->query($sql1, $row['order_products']);
-            if ($res1->row_array()>0) {
-              $row1 = $res1->row_array();
+            $row1 = $res1->row_array();
+            if ($row1['status'] == 0) {
               if ($row1['product_stock'] < $row['order_quantity']) {
                   $data['err'][] = array("code" => 3, "msg" => "Not enough stock of ".$row1['product_name']);
               }

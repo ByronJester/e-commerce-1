@@ -19,7 +19,7 @@
 	<script type="text/javascript" src="<?= base_url() ?>assets/js/tether.min.js"></script>
 	<script type="text/javascript" src="<?= base_url() ?>assets/js/popper.min.js"></script>
 	<script type="text/javascript" src="<?= base_url()?>assets/js/socket.io.js"></script>
-
+  <script type="text/javascript" src="<?= base_url()?>assets/js/site/realtime.js"></script>
 	<!-- Bootstrap core JavaScript-->
 	<script src="<?= base_url('assets/admintemp/') ?>vendor/jquery/jquery.min.js"></script>
 
