@@ -1,3 +1,5 @@
+var socket = io.connect('http://localhost:8080');
+
 $(document).ready(function() {
   loadCartcount();
 
@@ -119,7 +121,7 @@ $(document).ready(function() {
     var controller    = "customer/placeorder";
     var data          = $(this).serialize();
 
-    var name          = $('input[fname]').val()+" "+$('input[mname]').val()+" "+$('input[lname]').val();
+    var name          = $('input[name=fname]').val()+" "+$('input[name=mname]').val()+" "+$('input[name=lname]').val();
     var msg           = name+" place an order, check the orders tab";
     var datax         = {"name" : name, "msg" : msg}
 
@@ -384,6 +386,10 @@ function searchProduct(search) {
 
 }
 
+
+function realtimeOrder(data) {
+  socket.emit('new order', data);
+}
 
 
 function ajaxCall(controller, data, onsuccess, onerror = '', onfailure = ''){

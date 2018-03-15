@@ -48,6 +48,7 @@
               redirect(base_url());
             }else{
               $data['title'] = ucfirst($page);
+              $data['page']  = $page;
 
               $this->load->view('templates/aheader',$data);
               $this->load->view('admin/'.$page);

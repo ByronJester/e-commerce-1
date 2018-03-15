@@ -19,7 +19,7 @@
 	<script type="text/javascript" src="<?= base_url() ?>assets/js/tether.min.js"></script>
 	<script type="text/javascript" src="<?= base_url() ?>assets/js/popper.min.js"></script>
 	<script type="text/javascript" src="<?= base_url()?>assets/js/socket.io.js"></script>
-  <script type="text/javascript" src="<?= base_url()?>assets/js/site/realtime.js"></script>
+  <script type="text/javascript" src="<?= base_url()?>assets/js/site/realtime.js" defer="defer"></script>
 	<!-- Bootstrap core JavaScript-->
 	<script src="<?= base_url('assets/admintemp/') ?>vendor/jquery/jquery.min.js"></script>
 
@@ -31,7 +31,7 @@
 	<script type="text/javascript"> var base_url = $('#base_url').val(); var userid = $('#user_id').val();</script>
 
 </head>
-
+<input type="hidden" id="currentpage" value="<?= $page ?>">
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
@@ -95,12 +95,17 @@
               <span class="badge badge-pill badge-warning">6 New</span>
             </span>
             <span class="indicator text-warning d-none d-lg-block">
-              <i class="fa fa-fw fa-circle"></i>
+              <div id="alertt">
+
+              </div>
             </span>
           </a>
           <div class="dropdown-menu" aria-labelledby="alertsDropdown">
             <h6 class="dropdown-header">New Alerts:</h6>
             <div class="dropdown-divider"></div>
+            <div id="notiff">
+
+            </div>
             <!--
             <a class="dropdown-item" href="#">
               <span class="text-success">
