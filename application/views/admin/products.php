@@ -113,7 +113,6 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="editproduct">
       <div class="modal-body">
         <div class="container-fluid">
           <div class="row">
@@ -137,10 +136,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">Edit Product</button>
+        <input type="hidden" id="updprod">
+        <button type="button" id="updbtn" class="btn btn-primary updimg">Update Image</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
-      </form>
     </div>
   </div>
 </div>

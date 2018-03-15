@@ -24,6 +24,7 @@ $(document).ready(function() {
           type: "POST",
           success: function (data) {
               files1Uploader.clear();
+              files2Uploader.clear();
           },
           error: function (data) {
               alert("ERROR - " + data.responseText);
@@ -137,6 +138,8 @@ $(document).ready(function() {
     var onsuccess  = function(data){
     var append     = "";
 
+
+
       console.log(data);
       if (data[0].code != 2) {
 
@@ -151,6 +154,7 @@ $(document).ready(function() {
       }
 
       $('#image-view').html(append);
+      $("#updprod").val(product);
       $('#imagemodal').modal('show');
 
 
@@ -159,6 +163,14 @@ $(document).ready(function() {
     ajaxCall(controller, data, onsuccess);
 
   });
+
+  $(document).on('click', '#updbtn', function() {
+      var product = $('#updprod').val();
+      uploadImg(product);
+      $('#imagemodal').modal('hide');
+      swal('Success !', 'Image Updated', 'success');
+
+  })
 
 })// document rady
 
